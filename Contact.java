@@ -9,17 +9,22 @@ public abstract class Contact
     private String phoneNumber;
     private final LocalDateTime creationDate;
     private LocalDateTime lastEditDate;
-    private final boolean isPerson;
 
-    public Contact(String phoneNumber, boolean isPerson)
+    public Contact(String phoneNumber)
     {
         this.phoneNumber = phoneNumber;
         creationDate = LocalDateTime.now();
         lastEditDate = LocalDateTime.now();
-        this.isPerson = isPerson;
     }
 
-    abstract String getFullName();
+    public abstract String getFullName();
+
+    public abstract String[] getEditableFields();
+
+    public abstract void updateEditableField(String fieldToUpdate, String newValue);
+
+    public abstract String getEditableFieldAsString(String field);
+
 
     public String getPhoneNumber()
     {
@@ -40,11 +45,6 @@ public abstract class Contact
     public boolean hasPhoneNumber()
     {
         return phoneNumber != null;
-    }
-
-    public boolean isPerson()
-    {
-        return isPerson;
     }
 
     public LocalDateTime getCreationDate()
