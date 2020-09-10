@@ -15,6 +15,7 @@ public abstract class Contact
         this.phoneNumber = phoneNumber;
         creationDate = LocalDateTime.now();
         lastEditDate = LocalDateTime.now();
+
     }
 
     public abstract String getFullName();
@@ -23,7 +24,7 @@ public abstract class Contact
 
     public abstract void updateEditableField(String fieldToUpdate, String newValue);
 
-    public abstract String getEditableFieldAsString(String field);
+    public abstract String getEditableFieldValue(String field);
 
 
     public String getPhoneNumber()

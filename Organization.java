@@ -1,15 +1,13 @@
 package contacts;
 
-import java.time.temporal.ChronoUnit;
-
 public class Organization extends Contact
 {
     private String name;
     private String address;
 
-    public Organization(String phoneNumber, String name, String address, boolean isPerson)
+    public Organization(String phoneNumber, String name, String address)
     {
-        super(phoneNumber, isPerson);
+        super(phoneNumber);
         this.name = name;
         this.address = address;
     }
@@ -24,10 +22,61 @@ public class Organization extends Contact
         this.address = address;
     }
 
-    @Override
-    String getFullName()
+    public String getName()
     {
         return name;
+    }
+
+    @Override
+    public String getFullName()
+    {
+        return name;
+    }
+
+    @Override
+    public String[] getEditableFields()
+    {
+        return new String[]{"name", "address", "number"};
+    }
+
+    @Override
+    public void updateEditableField(String fieldToUpdate, String newValue)
+    {
+        String field = fieldToUpdate.toLowerCase();
+        switch (field)
+        {
+            case "name":
+                setName(newValue);
+                break;
+            case "address":
+                setAddress(newValue);
+                break;
+            case "number":
+                setPhoneNumber(newValue);
+                break;
+        }
+    }
+
+    @Override
+    public String getEditableFieldValue(String editableField)
+    {
+        String field = editableField.toLowerCase();
+        switch (field)
+        {
+            case "name":
+                return getName();
+            case "address":
+                return getAddress();
+            case "number":
+                return getPhoneNumber();
+            default:
+                return null;
+        }
+    }
+
+    public String getAddress()
+    {
+        return address;
     }
 
     @Override

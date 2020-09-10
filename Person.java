@@ -9,9 +9,9 @@ public class Person extends Contact
     private String firstName;
     private String lastName;
 
-    public Person(String firstName, String lastName, String phoneNumber, LocalDate birthday, Gender gender, boolean isPerson)
+    public Person(String firstName, String lastName, String phoneNumber, LocalDate birthday, Gender gender)
     {
-        super(phoneNumber, isPerson);
+        super(phoneNumber);
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthday = birthday;
@@ -59,9 +59,71 @@ public class Person extends Contact
     }
 
     @Override
-    String getFullName()
+    public String getFullName()
     {
         return firstName + " " + lastName;
+    }
+
+    @Override
+    public String[] getEditableFields()
+    {
+        return new String[]{"first name", "last name", "number", "birthday", "gender"};
+    }
+
+    @Override
+    public void updateEditableField(String fieldToUpdate, String newValue)
+    {
+        String field = newValue.toLowerCase();
+        switch (field)
+        {
+            case "number":
+                setPhoneNumber(newValue);
+                break;
+            case "first name":
+                setFirstName(newValue);
+                break;
+            case "last name":
+                setLastName(newValue);
+                break;
+            case "birthday":
+                if (Validator.validateBirthDate(newValue))
+                {
+                    LocalDate newBirthday = LocalDate.parse(newValue);
+                    setBirthday(newBirthday);
+                }
+            case "gender":
+                Gender newGender = Gender.stringToGender(newValue);
+                if (newGender != null)
+                {
+                    setGender(newGender);
+                } else
+                {
+                    System.out.println("Invalid gender");
+                }
+            default:
+                System.out.println("Invalid selection!");
+        }
+    }
+
+    @Override
+    public String getEditableFieldValue(String editableField)
+    {
+        String field = editableField.toLowerCase();
+        switch (field)
+        {
+            case "number":
+                return getPhoneNumber();
+            case "first name":
+                return getFirstName();
+            case "last name":
+                return getLastName();
+            case "birthday":
+                return getBirthday().toString();
+            case "gender":
+                return getGender().toString();
+            default:
+                return null;
+        }
     }
 
     @Override
