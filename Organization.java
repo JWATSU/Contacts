@@ -40,6 +40,7 @@ public class Organization extends Contact
     @Override
     public boolean updateEditableField(String fieldToUpdate, String newValue)
     {
+        boolean fieldWasUpdated = true;
         String field = fieldToUpdate.toLowerCase();
         switch (field)
         {
@@ -50,9 +51,13 @@ public class Organization extends Contact
                 setAddress(newValue);
                 break;
             case "number":
-                setPhoneNumber(newValue);
+                if (!setPhoneNumber(newValue))
+                {
+                    fieldWasUpdated = false;
+                }
                 break;
         }
+        return fieldWasUpdated;
     }
 
     @Override

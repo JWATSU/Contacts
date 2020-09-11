@@ -3,6 +3,7 @@ package contacts;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 
 public class ContactHandler
@@ -98,11 +99,12 @@ public class ContactHandler
         boolean contains = Arrays.asList(contact.getEditableFields()).contains(field);
         if (contains)
         {
-            System.out.println("Enter new " + field + ": ");
+            System.out.print("Enter new " + field + ": ");
             String newValue = scanner.nextLine();
             if (contact.updateEditableField(field, newValue))
             {
                 contactUpdated = true;
+                contact.setLastEditDate(LocalDateTime.now());
             }
         } else
         {
