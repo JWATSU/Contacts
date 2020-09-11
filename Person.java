@@ -9,13 +9,9 @@ public class Person extends Contact
     private String firstName;
     private String lastName;
 
-    public Person(String firstName, String lastName, String phoneNumber, LocalDate birthday, Gender gender)
+    public Person()
     {
-        super(phoneNumber);
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.birthday = birthday;
-        this.gender = gender;
+        super();
     }
 
     public LocalDate getBirthday()
@@ -73,7 +69,7 @@ public class Person extends Contact
     @Override
     public void updateEditableField(String fieldToUpdate, String newValue)
     {
-        String field = newValue.toLowerCase();
+        String field = fieldToUpdate.toLowerCase();
         switch (field)
         {
             case "number":
@@ -90,7 +86,11 @@ public class Person extends Contact
                 {
                     LocalDate newBirthday = LocalDate.parse(newValue);
                     setBirthday(newBirthday);
+                } else
+                {
+                    System.out.println("Bad birth date!");
                 }
+                break;
             case "gender":
                 Gender newGender = Gender.stringToGender(newValue);
                 if (newGender != null)
@@ -98,8 +98,9 @@ public class Person extends Contact
                     setGender(newGender);
                 } else
                 {
-                    System.out.println("Invalid gender");
+                    System.out.println("Invalid gender!");
                 }
+                break;
             default:
                 System.out.println("Invalid selection!");
         }
@@ -158,12 +159,19 @@ public class Person extends Contact
         {
             for (Gender b : Gender.values())
             {
+                //Input in the form of male/female does not work right now. Only m/f.
                 if (b.abbreviation.equalsIgnoreCase(abbreviation))
                 {
                     return b;
                 }
             }
             return null;
+        }
+
+        @Override
+        public String toString()
+        {
+            return name().substring(0, 1).toUpperCase() + name().substring(1).toLowerCase();
         }
     }
 }

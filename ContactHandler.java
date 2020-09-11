@@ -9,41 +9,44 @@ public class ContactHandler
 {
     private final Scanner scanner = new Scanner(System.in);
     private final List<Contact> contacts = new ArrayList<>();
-    private final Map<String, Runnable> menuChoices;
+    private final Map<String, Runnable> mainMenuChoices;
 
     public ContactHandler()
     {
-        menuChoices = new TreeMap<>();
-        menuChoices.put("add", this::addContact);
-        menuChoices.put("edit", this::editContact);
-        menuChoices.put("remove", this::removeContact);
-        menuChoices.put("count", this::displayCountOfContacts);
-        menuChoices.put("list", this::displayListOfContacts);
-        menuChoices.put("info", this::displayInfoAboutContact);
+        mainMenuChoices = new TreeMap<>();
+        mainMenuChoices.put("add", this::addContact);
+        mainMenuChoices.put("list", this::listMenu);
+        mainMenuChoices.put("search", this::searchForContact);
+        mainMenuChoices.put("count", this::displayCountOfContacts);
     }
 
     public void start()
     {
         while (true)
         {
-            System.out.printf("\nEnter action (%s, exit): ", String.join(", ", menuChoices.keySet()));
+            System.out.printf("\n[menu] Enter action (%s, exit): ", String.join(", ", mainMenuChoices.keySet()));
             String choice = scanner.nextLine().toLowerCase();
 
-            if (choice.equals("exit") || !menuChoices.containsKey(choice))
+            if (choice.equals("exit") || !mainMenuChoices.containsKey(choice))
             {
                 break;
             }
-            menuChoices.get(choice).run();
+            mainMenuChoices.get(choice).run();
         }
+    }
+
+    private void searchForContact()
+    {
+
     }
 
     private void displayInfoAboutContact()
     {
         if (!contacts.isEmpty())
         {
-            displayListOfContacts();
+            printListOfContacts();
             System.out.print("Enter index to show info: ");
-            int index = Integer.parseInt(scanner.nextLine())-1;
+            int index = Integer.parseInt(scanner.nextLine()) - 1;
             boolean legalIndex = index >= 0 && index < contacts.size();
             if (legalIndex)
             {
@@ -60,58 +63,25 @@ public class ContactHandler
     {
         System.out.print("Enter the type (person, organization): ");
         String type = scanner.nextLine().toLowerCase();
-        if (type.equals("person"))
+        Contact contact;
+        if ("person".equals(type))
         {
-            addPerson();
-        } else if (type.equals("organization"))
+            contact = new Person();
+        } else if ("organization".equals(type))
         {
-            addOrganization();
+            contact = new Organization();
+        } else
+        {
+            System.out.println("Not a valid type.");
+            return;
         }
-    }
-
-    private void addPerson()
-    {
-        System.out.print("Enter the first name of the person: ");
-        String firstName = scanner.nextLine();
-
-        System.out.print("Enter the last name of the person: ");
-        String lastName = scanner.nextLine();
-
-        System.out.print("Enter the birth date: ");
-        String birthdate = scanner.nextLine();
-        LocalDate birthday = Validator.validateBirthDate(birthdate) ? LocalDate.parse(birthdate) : null;
-
-        System.out.print("Enter the gender (M,F): ");
-        String genderEntered = scanner.nextLine().toUpperCase();
-        Person.Gender genderOfPerson = Person.Gender.stringToGender(genderEntered);
-        if (genderOfPerson == null)
+        for (String value : contact.getEditableFields())
         {
-            System.out.println("Illegal gender entered.");
+            System.out.print("Enter the " + value + ": ");
+            contact.updateEditableField(value, scanner.nextLine());
         }
 
-        System.out.print("Enter the phone number: ");
-        String phoneNumber = scanner.nextLine();
-        String phoneNumberOfPerson = Validator.validatePhoneNumber(phoneNumber) ? phoneNumber : null;
-
-        Person person = new Person(firstName, lastName, phoneNumberOfPerson, birthday, genderOfPerson, true);
-        contacts.add(person);
-
-        System.out.println("The record was added.");
-    }
-
-    private void addOrganization()
-    {
-        System.out.print("Enter the organization name: ");
-        String name = scanner.nextLine();
-        System.out.print("Enter the address: ");
-        String address = scanner.nextLine();
-        System.out.print("Enter the number: ");
-        String phoneNumber = scanner.nextLine();
-        String organizationPhoneNumber = Validator.validatePhoneNumber(phoneNumber) ? phoneNumber : null;
-
-        Organization organization = new Organization(organizationPhoneNumber, name, address, false);
-        contacts.add(organization);
-
+        contacts.add(contact);
         System.out.println("The record was added.");
     }
 
@@ -122,7 +92,7 @@ public class ContactHandler
             System.out.println("No records to remove!");
         } else
         {
-            displayListOfContacts();
+            printListOfContacts();
             System.out.print("Select a record: ");
             int index = Integer.parseInt(scanner.nextLine()) - 1;
             if (contacts.remove(index) != null)
@@ -234,9 +204,9 @@ public class ContactHandler
         }
     }
 
-    private void editContact()
+    private void editContact(Contact contact)
     {
-        if (contacts.isEmpty())
+        /*if (contacts.isEmpty())
         {
             System.out.println("No records to edit.");
         } else
@@ -252,10 +222,63 @@ public class ContactHandler
             {
                 editOrganization(contact);
             }
+        }*/
+    }
+
+    private void listMenu()
+    {
+        printListOfContacts();
+        if (contacts.isEmpty())
+        {
+            return;
+        }
+        System.out.print("\n[list] Enter action ([number], back): ");
+        String userChoice = scanner.nextLine();
+        if (!userChoice.matches("\\d+"))
+        {
+            return;
+        }
+        int index = Integer.parseInt(userChoice) - 1;
+        boolean isLegalIndex = index >= 0 && index < contacts.size();
+        if (!isLegalIndex)
+        {
+            return;
+        }
+        Contact contact = contacts.get(index);
+        modifyContactMenu(contact);
+    }
+
+    private void modifyContactMenu(Contact contact)
+    {
+        System.out.println(contact);
+        boolean continueLoop = true;
+        while (continueLoop)
+        {
+            System.out.print("\n[record] Enter action (edit, delete, menu): ");
+            String userChoice = scanner.nextLine().toLowerCase();
+            switch (userChoice)
+            {
+                case "edit":
+                    editContact(contact);
+                    break;
+                case "delete":
+                    deleteContact(contact);
+                    break;
+                case "menu":
+                    continueLoop = false;
+                    break;
+                default:
+                    System.out.println("Illegal action.");
+            }
         }
     }
 
-    private void displayListOfContacts()
+    private void deleteContact(Contact contact)
+    {
+
+    }
+
+    private void printListOfContacts()
     {
         if (contacts.isEmpty())
         {

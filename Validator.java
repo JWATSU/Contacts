@@ -13,7 +13,6 @@ public class Validator
         {
             return true;
         }
-        System.out.println("Bad phone number!");
         return false;
     }
 
@@ -24,7 +23,6 @@ public class Validator
             LocalDate.parse(birthday);
         } catch (DateTimeParseException e)
         {
-            System.out.println("Bad birth date!");
             return false;
         }
         return true;

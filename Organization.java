@@ -5,11 +5,9 @@ public class Organization extends Contact
     private String name;
     private String address;
 
-    public Organization(String phoneNumber, String name, String address)
+    public Organization()
     {
-        super(phoneNumber);
-        this.name = name;
-        this.address = address;
+        super();
     }
 
     public void setName(String name)

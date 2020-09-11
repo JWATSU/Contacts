@@ -10,12 +10,10 @@ public abstract class Contact
     private final LocalDateTime creationDate;
     private LocalDateTime lastEditDate;
 
-    public Contact(String phoneNumber)
+    public Contact()
     {
-        this.phoneNumber = phoneNumber;
         creationDate = LocalDateTime.now();
         lastEditDate = LocalDateTime.now();
-
     }
 
     public abstract String getFullName();
@@ -39,6 +37,7 @@ public abstract class Contact
             this.phoneNumber = newPhoneNumber;
         } else
         {
+            System.out.println("Bad phone number!");
             this.phoneNumber = "[no number]";
         }
     }
