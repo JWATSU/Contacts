@@ -90,24 +90,24 @@ public class ContactHandler
      */
     private boolean editContact(Contact contact)
     {
+        String editableFields = String.join(", ", contact.getEditableFields());
         boolean contactUpdated = false;
-        /*if (contacts.isEmpty())
+
+        System.out.print("Select a field (" + editableFields + "): ");
+        String field = scanner.nextLine().toLowerCase();
+        boolean contains = Arrays.asList(contact.getEditableFields()).contains(field);
+        if (contains)
         {
-            System.out.println("No records to edit.");
+            System.out.println("Enter new " + field + ": ");
+            String newValue = scanner.nextLine();
+            if (contact.updateEditableField(field, newValue))
+            {
+                contactUpdated = true;
+            }
         } else
         {
-            displayListOfContacts();
-            System.out.println("Select a record: ");
-            int index = Integer.parseInt(scanner.nextLine()) - 1;
-            Contact contact = contacts.get(index);
-            if (contact.isPerson())
-            {
-                editPerson(contact);
-            } else
-            {
-                editOrganization(contact);
-            }
-        }*/
+            System.out.println("Invalid field.");
+        }
         return contactUpdated;
     }
 

@@ -20,7 +20,7 @@ public abstract class Contact
 
     public abstract String[] getEditableFields();
 
-    public abstract void updateEditableField(String fieldToUpdate, String newValue);
+    public abstract boolean updateEditableField(String fieldToUpdate, String newValue);
 
     public abstract String getEditableFieldValue(String field);
 
@@ -30,15 +30,17 @@ public abstract class Contact
         return Objects.requireNonNullElse(phoneNumber, "[no data]");
     }
 
-    public void setPhoneNumber(String newPhoneNumber)
+    public boolean setPhoneNumber(String newPhoneNumber)
     {
         if (Validator.validatePhoneNumber(newPhoneNumber))
         {
             this.phoneNumber = newPhoneNumber;
+            return true;
         } else
         {
             System.out.println("Bad phone number!");
             this.phoneNumber = "[no number]";
+            return false;
         }
     }
 

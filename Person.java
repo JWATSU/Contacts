@@ -67,13 +67,17 @@ public class Person extends Contact
     }
 
     @Override
-    public void updateEditableField(String fieldToUpdate, String newValue)
+    public boolean updateEditableField(String fieldToUpdate, String newValue)
     {
+        boolean fieldWasUpdated = true;
         String field = fieldToUpdate.toLowerCase();
         switch (field)
         {
             case "number":
-                setPhoneNumber(newValue);
+                if (!setPhoneNumber(newValue))
+                {
+                    fieldWasUpdated = false;
+                }
                 break;
             case "first name":
                 setFirstName(newValue);
@@ -89,6 +93,7 @@ public class Person extends Contact
                 } else
                 {
                     System.out.println("Bad birth date!");
+                    fieldWasUpdated = false;
                 }
                 break;
             case "gender":
@@ -99,11 +104,14 @@ public class Person extends Contact
                 } else
                 {
                     System.out.println("Invalid gender!");
+                    fieldWasUpdated = false;
                 }
                 break;
             default:
                 System.out.println("Invalid selection!");
+                fieldWasUpdated = false;
         }
+        return fieldWasUpdated;
     }
 
     @Override

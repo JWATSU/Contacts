@@ -38,7 +38,7 @@ public class Organization extends Contact
     }
 
     @Override
-    public void updateEditableField(String fieldToUpdate, String newValue)
+    public boolean updateEditableField(String fieldToUpdate, String newValue)
     {
         String field = fieldToUpdate.toLowerCase();
         switch (field)
