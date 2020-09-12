@@ -11,6 +11,6 @@ public class Main
             filePath = args[0];
         }
         ContactHandler contactHandler = new ContactHandler(filePath);
-        contactHandler.startMenu();
+        contactHandler.init();
     }
 }
