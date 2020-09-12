@@ -1,14 +1,16 @@
 package contacts;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
-public abstract class Contact
+public abstract class Contact implements Serializable
 {
     private String phoneNumber;
     private final LocalDateTime creationDate;
     private LocalDateTime lastEditDate;
+    private static final long serialVersionUID = 1L;
 
     public Contact()
     {
@@ -32,7 +34,7 @@ public abstract class Contact
 
     public boolean setPhoneNumber(String newPhoneNumber)
     {
-        if (Validator.validatePhoneNumber(newPhoneNumber))
+        if (validatePhoneNumber(newPhoneNumber))
         {
             this.phoneNumber = newPhoneNumber;
             return true;
@@ -64,6 +66,13 @@ public abstract class Contact
         this.lastEditDate = lastEditDate;
     }
 
+    public static boolean validatePhoneNumber(String phoneNumber)
+    {
+        return phoneNumber.matches("\\+?\\(?[a-zA-Z0-9]+\\)?([\\-\\s]([a-zA-Z0-9]{2,}))+|" +
+                "\\+?[a-zA-Z0-9]+[\\s\\-]\\(?[a-zA-Z0-9]{2,}\\)?([\\s\\-]([a-zA-Z0-9]{2,}))*|" +
+                "\\+?\\(?[a-zA-Z0-9]+\\)?");
+    }
+
     @Override
     public String toString()
     {
@@ -71,4 +80,5 @@ public abstract class Contact
                 "Time created: " + creationDate.truncatedTo(ChronoUnit.MINUTES) + "\n" +
                 "Time last edit: " + lastEditDate.truncatedTo(ChronoUnit.MINUTES);
     }
+
 }

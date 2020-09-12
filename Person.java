@@ -1,6 +1,7 @@
 package contacts;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
 public class Person extends Contact
 {
@@ -86,7 +87,7 @@ public class Person extends Contact
                 setLastName(newValue);
                 break;
             case "birthday":
-                if (Validator.validateBirthDate(newValue))
+                if (validateBirthDate(newValue))
                 {
                     LocalDate newBirthday = LocalDate.parse(newValue);
                     setBirthday(newBirthday);
@@ -176,10 +177,23 @@ public class Person extends Contact
             return null;
         }
 
+
         @Override
         public String toString()
         {
             return name().substring(0, 1).toUpperCase() + name().substring(1).toLowerCase();
         }
+    }
+
+    public static boolean validateBirthDate(String birthday)
+    {
+        try
+        {
+            LocalDate.parse(birthday);
+        } catch (DateTimeParseException e)
+        {
+            return false;
+        }
+        return true;
     }
 }

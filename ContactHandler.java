@@ -1,6 +1,8 @@
 package contacts;
 
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -9,16 +11,49 @@ import java.util.*;
 public class ContactHandler
 {
     private final Scanner scanner = new Scanner(System.in);
-    private final List<Contact> contacts = new ArrayList<>();
+    private final List<Contact> contacts;
     private final Map<String, Runnable> mainMenuChoices;
+    private final String fileName;
 
-    public ContactHandler()
+    public ContactHandler(String filePath)
     {
         mainMenuChoices = new TreeMap<>();
         mainMenuChoices.put("add", this::addContact);
         mainMenuChoices.put("list", this::listMenu);
         mainMenuChoices.put("search", this::searchForContact);
         mainMenuChoices.put("count", this::displayCountOfContacts);
+        this.fileName = filePath;
+        this.contacts = new ArrayList<>();
+
+        if (!filePath.isEmpty())
+        {
+            try
+            {
+                File f = new File(filePath);
+                if (f.exists() && !f.isDirectory())
+                {
+                    ArrayList<Contact> deserializedList = (ArrayList<Contact>) SerializationUtils.deserialize(filePath);
+                    contacts.addAll(deserializedList);
+                } else
+                {
+                    f.createNewFile();
+                }
+            } catch (IOException | ClassNotFoundException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void saveState()
+    {
+        try
+        {
+            SerializationUtils.serialize(contacts, fileName);
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public void startMenu()
@@ -28,9 +63,13 @@ public class ContactHandler
             System.out.printf("\n[menu] Enter action (%s, exit): ", String.join(", ", mainMenuChoices.keySet()));
             String choice = scanner.nextLine().toLowerCase();
 
-            if (choice.equals("exit") || !mainMenuChoices.containsKey(choice))
+            if (choice.equals("exit"))
             {
                 break;
+            } else if (!mainMenuChoices.containsKey(choice))
+            {
+                System.out.println("Invalid choice.");
+                continue;
             }
             mainMenuChoices.get(choice).run();
         }
@@ -81,9 +120,9 @@ public class ContactHandler
             System.out.print("Enter the " + value + ": ");
             contact.updateEditableField(value, scanner.nextLine());
         }
-
         contacts.add(contact);
         System.out.println("The record was added.");
+        saveState();
     }
 
     /**
@@ -190,4 +229,6 @@ public class ContactHandler
     {
         System.out.println("The Phone Book has " + contacts.size() + " records.");
     }
+
+
 }
