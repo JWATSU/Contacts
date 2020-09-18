@@ -60,23 +60,6 @@ public class Organization extends Contact
         return fieldWasUpdated;
     }
 
-    @Override
-    public String getEditableFieldValue(String editableField)
-    {
-        String field = editableField.toLowerCase();
-        switch (field)
-        {
-            case "name":
-                return getName();
-            case "address":
-                return getAddress();
-            case "number":
-                return getPhoneNumber();
-            default:
-                return null;
-        }
-    }
-
     public String getAddress()
     {
         return address;

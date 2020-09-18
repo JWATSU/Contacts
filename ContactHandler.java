@@ -38,6 +38,7 @@ public class ContactHandler
                 {
                     file.createNewFile();
                 }
+                System.out.println("open " + filePath);
             } catch (IOException | ClassNotFoundException e)
             {
                 e.printStackTrace();
@@ -154,7 +155,7 @@ public class ContactHandler
             contact.updateEditableField(value, scanner.nextLine());
         }
         contacts.add(contact);
-        System.out.println("The record was added.");
+        System.out.println("A record was added.");
         if (!filePath.isEmpty())
         {
             saveState();

@@ -64,7 +64,7 @@ public class Person extends Contact
     @Override
     public String[] getEditableFields()
     {
-        return new String[]{"first name", "last name", "number", "birthday", "gender"};
+        return new String[]{"first name", "last name", "birthday", "gender", "number"};
     }
 
     @Override
@@ -113,27 +113,6 @@ public class Person extends Contact
                 fieldWasUpdated = false;
         }
         return fieldWasUpdated;
-    }
-
-    @Override
-    public String getEditableFieldValue(String editableField)
-    {
-        String field = editableField.toLowerCase();
-        switch (field)
-        {
-            case "number":
-                return getPhoneNumber();
-            case "first name":
-                return getFirstName();
-            case "last name":
-                return getLastName();
-            case "birthday":
-                return getBirthday().toString();
-            case "gender":
-                return getGender().toString();
-            default:
-                return null;
-        }
     }
 
     @Override

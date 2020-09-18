@@ -10,7 +10,7 @@ public abstract class Contact implements Serializable
     private String phoneNumber;
     private final LocalDateTime creationDate;
     private LocalDateTime lastEditDate;
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
     public Contact()
     {
@@ -23,9 +23,6 @@ public abstract class Contact implements Serializable
     public abstract String[] getEditableFields();
 
     public abstract boolean updateEditableField(String fieldToUpdate, String newValue);
-
-    public abstract String getEditableFieldValue(String field);
-
 
     public String getPhoneNumber()
     {
