@@ -41,7 +41,7 @@ public abstract class Contact implements Serializable
         } else
         {
             System.out.println("Bad phone number!");
-            this.phoneNumber = "[no number]";
+            this.phoneNumber = "[no data]";
             return false;
         }
     }

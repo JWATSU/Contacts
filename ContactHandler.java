@@ -78,25 +78,57 @@ public class ContactHandler
 
     private void searchForContact()
     {
-
+        if (contacts.isEmpty())
+        {
+            System.out.println("There are no records to search for.");
+            return;
+        }
+        System.out.print("Enter search query: ");
+        String searchQuery = scanner.nextLine().toLowerCase();
+        List<Contact> contactsFound = new ArrayList<>();
+        for (Contact contact : contacts)
+        {
+            if (contact.toString().toLowerCase().contains(searchQuery))
+            {
+                contactsFound.add(contact);
+            }
+        }
+        if (contactsFound.isEmpty())
+        {
+            System.out.println("Found 0 results.");
+            return;
+        }
+        System.out.println("Found " + contactsFound.size() + " results:");
+        printListOfContacts(contactsFound);
+        searchMenu();
     }
 
-    private void displayInfoAboutContact()
+    private void searchMenu()
     {
-        if (!contacts.isEmpty())
+        System.out.print("\n[search] Enter action ([number], back, again): ");
+        String choice = scanner.nextLine().toLowerCase();
+
+        if (choice.equals("again"))
         {
-            printListOfContacts();
-            System.out.print("Enter index to show info: ");
-            int index = Integer.parseInt(scanner.nextLine()) - 1;
-            boolean legalIndex = index >= 0 && index < contacts.size();
-            if (legalIndex)
+            searchForContact();
+        } else if (choice.equals("back"))
+        {
+            return;
+        } else if (choice.matches("\\d+"))
+        {
+            int index = Integer.parseInt(choice) - 1;
+            boolean isLegalIndex = index >= 0 && index < contacts.size();
+            if (isLegalIndex)
             {
                 Contact contact = contacts.get(index);
-                System.out.println(contact);
+                modifyContactMenu(contact);
+            } else
+            {
+                System.out.println("Invalid index.");
             }
         } else
         {
-            System.out.println("There are no records to display.");
+            System.out.println("Invalid action.");
         }
     }
 
@@ -162,7 +194,7 @@ public class ContactHandler
 
     private void listMenu()
     {
-        printListOfContacts();
+        printListOfContacts(contacts);
         if (contacts.isEmpty())
         {
             return;
@@ -219,16 +251,16 @@ public class ContactHandler
         contacts.remove(contact);
     }
 
-    private void printListOfContacts()
+    private void printListOfContacts(List<Contact> listToPrint)
     {
         if (contacts.isEmpty())
         {
             System.out.println("There are no records to display.");
         } else
         {
-            for (int i = 0; i < contacts.size(); i++)
+            for (int i = 0; i < listToPrint.size(); i++)
             {
-                System.out.println(i + 1 + ". " + contacts.get(i).getFullName());
+                System.out.println(i + 1 + ". " + listToPrint.get(i).getFullName());
             }
         }
     }
